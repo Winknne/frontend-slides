@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Style C Preview — Swiss Modern</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;0,900;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* === VIEWPORT BASE === */
+html, body { height: 100%; overflow-x: hidden; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; position: relative; }
+:root {
+  --title-size: clamp(1.5rem, 5vw, 4rem);
+  --body-size: clamp(0.75rem, 1.5vw, 1.125rem);
+  --small-size: clamp(0.65rem, 1vw, 0.875rem);
+  --slide-padding: clamp(1rem, 4vw, 4rem);
+
+  /* Swiss Modern palette */
+  --bg-white: #ffffff;
+  --text-black: #0a0a0a;
+  --text-mid: #444;
+  --text-light: #999;
+  --accent-red: #ff3300;
+  --grid-line: rgba(0,0,0,0.06);
+}
+@media (max-height: 700px) { :root { --slide-padding: clamp(0.75rem, 3vw, 2rem); --title-size: clamp(1.25rem, 4.5vw, 2.5rem); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+
+/* === SWISS MODERN THEME === */
+body { background: var(--bg-white); font-family: 'Nunito', sans-serif; color: var(--text-black); }
+
+/* Visible grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: clamp(30px, 5vw, 60px) clamp(30px, 5vw, 60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top header bar */
+.header-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(3px, 0.5vh, 5px);
+  background: var(--accent-red);
+  opacity: 0;
+  animation: bar-grow 0.5s ease 0.2s forwards;
+}
+
+/* Large bold section number */
+.section-num {
+  position: absolute;
+  top: clamp(1rem, 2.5vh, 3rem);
+  right: clamp(1rem, 3vw, 3rem);
+  font-family: 'Archivo', sans-serif;
+  font-weight: 900;
+  font-size: clamp(4rem, 12vw, 14rem);
+  color: var(--text-black);
+  opacity: 0.05;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  user-select: none;
+  animation: num-appear 0.6s ease 0.4s forwards;
+}
+
+/* Asymmetric red block accent */
+.red-block {
+  position: absolute;
+  left: 0;
+  top: 30%;
+  width: clamp(4px, 0.6vw, 8px);
+  height: clamp(80px, 15vh, 160px);
+  background: var(--accent-red);
+  opacity: 0;
+  animation: block-slide 0.5s ease 0.6s forwards;
+}
+
+/* Main layout: asymmetric grid */
+.slide-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr clamp(150px, 25vw, 300px);
+  grid-template-rows: 1fr;
+  padding: var(--slide-padding);
+  padding-top: clamp(3rem, 6vh, 6rem);
+  max-height: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  gap: clamp(1rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.main-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.5rem, 1.5vh, 1.5rem);
+}
+
+.kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: var(--small-size);
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent-red);
+  opacity: 0;
+  animation: fade-up 0.5s ease 0.75s forwards;
+}
+
+.title {
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--text-black);
+  opacity: 0;
+  animation: fade-up 0.7s ease 0.95s forwards;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.title .highlight {
+  color: var(--accent-red);
+}
+
+.subtitle {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.65;
+  opacity: 0;
+  animation: fade-up 0.6s ease 1.2s forwards;
+  max-width: 52ch;
+  border-left: 2px solid var(--accent-red);
+  padding-left: clamp(0.75rem, 1.5vw, 1.25rem);
+}
+
+/* Side column: stats stacked */
+.side-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vh, 2rem);
+  justify-content: center;
+  opacity: 0;
+  animation: fade-left 0.7s ease 1.35s forwards;
+  border-left: 1px solid rgba(0,0,0,0.12);
+  padding-left: clamp(1rem, 2vw, 2rem);
+}
+
+.stat { display: flex; flex-direction: column; gap: 0.2em; }
+.stat-num {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--text-black);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-label {
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+/* Bottom bar */
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: clamp(2.5rem, 5vh, 4rem);
+  background: var(--text-black);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--slide-padding);
+  justify-content: space-between;
+  opacity: 0;
+  animation: bar-rise 0.5s ease 1.6s forwards;
+  z-index: 2;
+}
+
+.bottom-bar .conf {
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: white;
+}
+
+.bottom-bar .year {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.1em;
+}
+
+.style-tag {
+  position: absolute;
+  bottom: clamp(3.5rem, 6vh, 5rem);
+  right: clamp(1rem, 3vw, 3rem);
+  font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  opacity: 0.5;
+  font-family: 'Archivo', sans-serif;
+  z-index: 1;
+}
+
+@keyframes bar-grow { from { transform: scaleX(0); transform-origin: left; opacity: 1; } to { transform: scaleX(1); opacity: 1; } }
+@keyframes num-appear { to { opacity: 0.05; } }
+@keyframes block-slide { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-left { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes bar-rise { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<section class="slide">
+  <div class="header-bar"></div>
+  <div class="section-num">01</div>
+  <div class="red-block"></div>
+  <div class="slide-content">
+    <div class="main-col">
+      <p class="kicker">Applied Linguistics · 2026</p>
+      <h1 class="title">Emotion<br><span class="highlight">Arcs</span><br>in Writing</h1>
+      <p class="subtitle">VAD dimensional trajectories across IMRaD sections in 3,600 medical research articles — a corpus study of how affect patterns with genre</p>
+    </div>
+    <div class="side-col">
+      <div class="stat">
+        <span class="stat-num">3.6K</span>
+        <span class="stat-label">Articles</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">13.6M</span>
+        <span class="stat-label">Tokens</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-label">VAD dims</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">0.83</span>
+        <span class="stat-label">Kendall's W</span>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <span class="conf">Your Name · Conference Title</span>
+    <span class="year">2026</span>
+  </div>
+  <div class="style-tag">Style C — Swiss Modern</div>
+</section>
+</body>
+</html>
