@@ -993,18 +993,21 @@ html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 0.75rem;
   font-family: var(--font-body);
   font-weight: 600;
   cursor: pointer;
   z-index: 10001;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+  opacity: 0.85;
+  pointer-events: auto;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 8px rgba(196,118,138,0.35);
 }
 
-.edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+.edit-toggle:hover { opacity: 1; transform: translateY(-1px); }
+.edit-toggle.active { background: #1e1e1e; opacity: 1; }
+.edit-toggle.show { opacity: 1; }
 
 .edit-banner {
   position: fixed;
